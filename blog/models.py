@@ -19,7 +19,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customer_name")
+    customer = models.CharField(max_length=100)
     customer_address = models.ForeignKey(AddressField, on_delete=models.CASCADE, related_name='+')
     problem_reported = models.TextField()
     retification = models.TextField()
