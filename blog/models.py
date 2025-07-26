@@ -6,11 +6,11 @@ STATUS = ((0, "Draft"), (1, "Published"),
 
 # Create your models here.
 class AddressField(models.Model):
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
-    country = models.CharField(max_length=100)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.street}, {self.city}, {self.state}, {self.country}"
@@ -20,7 +20,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
     customer = models.CharField(max_length=100)
-    customer_address = models.ForeignKey(AddressField, on_delete=models.CASCADE, related_name='+')
+    customer_address = models.ForeignKey(AddressField, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     problem_reported = models.TextField()
     retification = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
