@@ -22,7 +22,7 @@ class Post(models.Model):
     customer = models.CharField(max_length=100)
     customer_address = models.ForeignKey(AddressField, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     problem_reported = models.TextField()
-    retification = models.TextField()
+    rectification = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
     excerpt = models.TextField(blank=True)
