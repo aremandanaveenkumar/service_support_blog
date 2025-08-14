@@ -30,7 +30,6 @@ def post_detail(request, slug):
     comments_all = post.comments.all().order_by("-created_on")
     comments = comments_all.filter(approved=True)
     comment_count = post.comments.filter(approved=True).count()
-    
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
