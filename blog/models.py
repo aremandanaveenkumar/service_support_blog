@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
 STATUS = ((0, "Draft"), (1, "Published"), 
-          (2, "NotRectified"), (3,  "Rectified"))
+          (2, "NotRectified"), (3,  "Rectified"), (99,  "RequestToDelete"))
+
 
 # Create your models here.
 class AddressField(models.Model):
@@ -15,6 +16,7 @@ class AddressField(models.Model):
 
     def __str__(self):
         return f"{self.street}, {self.city}, {self.state}, {self.country}"
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
@@ -35,6 +37,7 @@ class Post(models.Model):
                     
     def __str__(self):
         return f"{self.title} | written by {self.author}"
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")

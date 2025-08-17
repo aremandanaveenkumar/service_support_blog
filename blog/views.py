@@ -2,12 +2,34 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.utils.text import slugify
+from django.contrib.auth.models import User
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
+
+
+class PostDrafts(generic.ListView):
+    queryset = Post.objects.all().filter(status=0)
+    template_name = "blog/index.html"
+    paginate_by = 6
+
+    def get_queryset(self):
+        author = self.kwargs.get('author')
+        if author:
+            user = get_object_or_404(User, username=author)
+            return Post.objects.filter(author=user, status=0)
+        return Post.objects.all().filter(status=0)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        author = self.kwargs.get('author')
+        if author:
+            context['author'] = author
+        return context
 
 # Create your views here.
 class PostList(generic.ListView):
-    queryset = Post.objects.all().exclude(status=0)
+    queryset = Post.objects.all().exclude(status=0).exclude(status=99)
     template_name = "blog/index.html"
     paginate_by = 6
 
@@ -25,7 +47,7 @@ def post_detail(request, slug):
 
     :template:'blog/post_detail.html'
     """
-    queryset = Post.objects.filter(status=1)
+    queryset = Post.objects.all()
     post = get_object_or_404(queryset, slug=slug)
     comments_all = post.comments.all().order_by("-created_on")
     comments = comments_all.filter(approved=True)
@@ -51,6 +73,88 @@ def post_detail(request, slug):
                     },
                   )
 
+
+def post_create(request):
+    """
+    create new post
+    """
+    if request.method == "POST":
+        post_form = PostForm(data=request.POST)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            slug = slugify(post.title)
+            post.slug = slug
+            post.author = request.user
+            post.save()
+            messages.add_message(request, messages.SUCCESS, "Post Created.")
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    else:
+        post_form = PostForm()
+
+    return render(
+        request,
+        "blog/post_create.html",
+        {
+            "post_form": post_form
+        },
+    )
+
+
+def post_edit(request, slug):
+    """
+    edit post
+    """
+    queryset = Post.objects.all()
+    editpost = get_object_or_404(queryset, slug=slug)
+    
+    if request.method == "POST":
+        editpost.delete()
+        post_form = PostForm(data=request.POST)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            slug = slugify(post.title)
+            post.slug = slug
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    else:
+        post_form = PostForm(instance=editpost)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            slug = slugify(post.title)
+            post.slug = slug
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+        
+    return render(
+        request,
+        "blog/post_create.html",
+        {
+            "post_form": post_form
+        },
+    )
+
+
+def post_delete(request, slug):
+    """
+    delete Post
+    """
+    queryset = Post.objects.all()
+    post = get_object_or_404(queryset, slug=slug)
+
+    if post.author == request.user:
+        post.status = 99
+        post.save()
+        messages.add_message(request, messages.SUCCESS, 
+                             'Admin Informed for deletion, if the reason is valid, it shall be processed!')
+    else:
+        messages.add_message(request, messages.ERROR, 
+                             'You can only request to delete your own Posts!')
+
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+
 def comment_edit(request, slug, comment_id):
     """
     view to edit comments
@@ -72,6 +176,7 @@ def comment_edit(request, slug, comment_id):
             messages.add_message(request, messages.ERROR, 'Error updating comment!')
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
 
 def comment_delete(request, slug, comment_id):
     """
