@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-from .models import Post, Comment
+from .models import Post, Comment, AddressField
 from .forms import CommentForm, PostForm
 
 
@@ -27,11 +27,31 @@ class PostDrafts(generic.ListView):
             context['author'] = author
         return context
 
+
 # Create your views here.
 class PostList(generic.ListView):
     queryset = Post.objects.all().exclude(status=0).exclude(status=99)
     template_name = "blog/index.html"
     paginate_by = 6
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("q")
+        author_id = self.request.GET.get("user")
+
+        if query:
+            queryset = queryset.filter(title__icontains=query)
+        if author_id:
+            queryset = queryset.filter(author_id=author_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get("q", "")
+        context["selected_user"] = self.request.GET.get("user", "")
+        context["users"] = User.objects.all()
+        return context
 
 
 def post_detail(request, slug):
