@@ -36,7 +36,7 @@ class TestPostFirm(TestCase):
             'status': 0
             })
         self.assertFalse(post_form.is_valid(), msg='Form is valid')
-    
+
     def test_title_is_required(self):
         """Test for the 'title' field"""
         form = PostForm({
