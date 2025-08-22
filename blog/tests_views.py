@@ -13,9 +13,10 @@ class TestBlogViews(TestCase):
             password="myPassword",
             email="test@test.com"
         )
+        
         self.post = Post(title="Blog title", author=self.user,
                          slug="blog-title", 
-                         customer="Customer content",
+                         customer="testCustomer",
                          problem_reported="Problem content", 
                          rectification="Rectification content", status=1)
         self.post.save()
