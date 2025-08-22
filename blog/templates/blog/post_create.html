@@ -9,11 +9,24 @@
             <div class="card-body " id="create_new_post" user="{{ user }}">
                 <form id="postForm" method="post"
           style="margin-top: 1.3em;" >
-          {{ post_form | crispy }}
           {% csrf_token %}
+          {{ post_form.title | as_crispy_field }}
+          {{ post_form.featured_image | as_crispy_field }}
+          {{ post_form.customer | as_crispy_field }}
+          {{ post_form.customer_address | as_crispy_field }}
+          {% if is_create %}
+            <a type="button" class="btn btn-outline-primary btn-sm mb-4" 
+            href="{% url 'add_address' %}">
+            Add New Address
+            </a>
+          {% endif %}
+          {{ post_form.problem_reported | as_crispy_field }}
+          {{ post_form.rectification | as_crispy_field }}
+          {{ post_form.status | as_crispy_field }}
+          {{ post_form.excerpt | as_crispy_field }}
 {% if user.is_authenticated %}
           <button id="submitButton" type="submit"
-            class="btn btn-login btn-lg" >Save</button>
+            class="btn btn-success mt-3" >Save</button>
 {% endif %}
         </form>
             </div>
@@ -22,7 +35,3 @@
 </div>
 
 {% endblock content %}
-
-{% block extras %}
-
-{% endblock %}

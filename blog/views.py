@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from .models import Post, Comment, AddressField
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, AddressForm
 
 
 class PostDrafts(generic.ListView):
@@ -94,6 +94,36 @@ def post_detail(request, slug):
                   )
 
 
+def add_address(request):
+    """
+    add new customer address
+    """
+    if request.method == "POST":
+        address_form = AddressForm(data=request.POST)
+        if address_form.is_valid() and any(address_form.cleaned_data.values()):
+            existing_address = AddressField.objects.filter(
+                street=address_form.cleaned_data.get("street"), 
+                city=address_form.cleaned_data.get("city"), 
+                state=address_form.cleaned_data.get("state"), 
+                postal_code=address_form.cleaned_data.get("postal_code"), 
+                country=address_form.cleaned_data.get("country")
+                ).first()
+
+            if not existing_address:
+                address_form.save()
+                return HttpResponseRedirect(reverse('post_create'))  
+    else:
+        address_form = AddressForm()
+
+    return render(
+        request,
+        "blog/add_address.html",
+        {
+            "address_form": address_form,
+        },
+    )
+
+
 def post_create(request):
     """
     create new post
@@ -106,8 +136,11 @@ def post_create(request):
             post.slug = slug
             post.author = request.user
             post.save()
-            messages.add_message(request, messages.SUCCESS, "Post Created.")
-            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+            messages.add_message(request, 
+                                 messages.SUCCESS, "Post Created.")
+            return HttpResponseRedirect(reverse('post_detail', 
+                                                args=[slug]))    
+
     else:
         post_form = PostForm()
 
@@ -115,7 +148,8 @@ def post_create(request):
         request,
         "blog/post_create.html",
         {
-            "post_form": post_form
+            "post_form": post_form,
+            "is_create": True
         },
     )
 
@@ -151,7 +185,8 @@ def post_edit(request, slug):
         request,
         "blog/post_create.html",
         {
-            "post_form": post_form
+            "post_form": post_form,
+            "is_create": False
         },
     )
 
