@@ -129,13 +129,37 @@ def post_create(request):
     create new post
     """
     if request.method == "POST":
-        post_form = PostForm(data=request.POST)
-        if post_form.is_valid():
+        post_form = PostForm(data=request.POST or None)
+        address_form = AddressForm(data=request.POST or None)
+        action = request.POST.get('action')
+        if action == 'saveAddress' and address_form.is_valid():
+            new_address = address_form.save()
+            post_form = PostForm(data=request.POST or None, 
+                                 initial={
+                                     "customer_address": new_address.id
+                                 })
+            address_form = AddressForm()
+            return render(request, "blog/post_create.html",
+                          {
+                              "post_form": post_form, 
+                              "address_form": address_form, 
+                              "is_create": True},)
+
+        elif action == 'cancel':
+            address_form = AddressForm()
+            return render(request, "blog/post_create.html",
+                          {
+                              "post_form": post_form, 
+                              "address_form": address_form, 
+                              "is_create": True},)
+
+        elif action == 'savePost' and post_form.is_valid():
             post = post_form.save(commit=False)
             slug = slugify(post.title)
             post.slug = slug
-            post.author = request.user
+            post.author = request.user            
             post.save()
+            address_form = AddressForm()
             messages.add_message(request, 
                                  messages.SUCCESS, "Post Created.")
             return HttpResponseRedirect(reverse('post_detail', 
@@ -143,12 +167,14 @@ def post_create(request):
 
     else:
         post_form = PostForm()
+        address_form = AddressForm()
 
     return render(
         request,
         "blog/post_create.html",
         {
             "post_form": post_form,
+            "address_form": address_form,
             "is_create": True
         },
     )

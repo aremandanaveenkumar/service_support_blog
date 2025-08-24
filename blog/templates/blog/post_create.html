@@ -15,19 +15,38 @@
           {{ post_form.customer | as_crispy_field }}
           {{ post_form.customer_address | as_crispy_field }}
           {% if is_create %}
-            <a type="button" class="btn btn-outline-primary btn-sm mb-4" 
-            href="{% url 'add_address' %}">
+            <button type="button" class="btn btn-outline-primary btn-sm mb-4" 
+            onclick="document.getElementById('new-address').style.display=(document.getElementById('new-address').style.display === 'none') ? 'block' : 'none' " >
             Add New Address
-            </a>
+            </button>
+  
+                <div id="new-address" class="mb-4" style="display: none;">
+                    <form id="addressForm" method="post"
+          style="margin-top: 1.3em;" >
+          {% csrf_token %}
+            <h5>New Address</h5>
+                {{ address_form | crispy }}
+        {% if user.is_authenticated %}
+          <button id="submitButton" type="submit" name="action" value="saveAddress"
+            class="btn btn-success mt-3" 
+           >Save</button>
+          <button id="cancelButton" type="submit" name="action" value="cancel"
+          onclick="document.getElementById('new-address').style.display='none'"
+            class="btn btn-warning mt-3" >Cancel</button>
+        {% endif %}
+        </form>
+                </div>
+
           {% endif %}
           {{ post_form.problem_reported | as_crispy_field }}
           {{ post_form.rectification | as_crispy_field }}
           {{ post_form.status | as_crispy_field }}
           {{ post_form.excerpt | as_crispy_field }}
-{% if user.is_authenticated %}
-          <button id="submitButton" type="submit"
-            class="btn btn-success mt-3" >Save</button>
-{% endif %}
+            {% if user.is_authenticated %}
+                <button id="submitButton" type="submit" 
+                name="action" value="savePost" 
+                class="btn btn-success mt-3" >Save</button>
+            {% endif %}
         </form>
             </div>
         </div>
