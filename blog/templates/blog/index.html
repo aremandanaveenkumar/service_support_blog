@@ -9,8 +9,8 @@
         <h5 class="mb-0">Posts</h5>
         <div class="d-flex justify-content-end gap-2">
     {% if user.is_authenticated %}
-            <a href="{% url 'post_create' %}" id="create_new_post" class="btn btn-sm btn-primary">+ Add New</a>
-            <a href="{% url 'drafts' user.username %}" id="view_drafts" class="btn btn-sm btn-secondary">View My
+            <a role="button" href="{% url 'post_create' %}" id="create_new_post" class="btn btn-primary">+ Add New</a>
+            <a role="button" href="{% url 'drafts' user.username %}" id="view_drafts" class="btn btn-secondary">View My
                 Drafts</a>
     {% endif %}
              {% if users %}
@@ -48,11 +48,11 @@
             <div class="row">
 
                 <!-- Blog Entries Column -->
-                <div class="col-12 mt-3 left">
+                <div class="col-12 mt-3 left ">
                     <div class="row">
                         {% for post in post_list %}
-                        <div class="col-md-4">
-                            <div class="card mb-4">
+                        <div class="col-md-4 d-flex flex-wrap">
+                            <div class="card mb-4 shadow-lg flex-fill">
                                 <div class="card-body">
                                     <div class="image-container">
                                         {% if "placeholder" in post.featured_image.url %}
