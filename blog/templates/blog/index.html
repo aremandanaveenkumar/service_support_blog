@@ -5,43 +5,53 @@
 {% block content %}
 <!-- index.html content starts here -->
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Posts</h5>
-        <div class="d-flex justify-content-end gap-2">
-    {% if user.is_authenticated %}
-            <a role="button" href="{% url 'post_create' %}" id="create_new_post" class="btn btn-primary">+ Add New</a>
-            <a role="button" href="{% url 'drafts' user.username %}" id="view_drafts" class="btn btn-secondary">View My
-                Drafts</a>
-    {% endif %}
-             {% if users %}
-            <div class="search-posts">
-                <form method="get" class="d-flex gap-2">
-                    <input type="text" name="q" value="{{ query }}" class="form-control me-2"
-                        placeholder="Search Posts...">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Filter Posts By
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li>
-                                <select name="user" class="form-select">
-                                    <option value="">All Users</option>
-                                    {% for u in users%}
-                                        <option value="{{ u.id }}" 
-                                        {% if selected_user == u.id|stringformat:"s" %}selected{% endif %}>
-                                        {{ u.username }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
+    <div class="card-header">
+        <nav class="navbar navbar-expand-sm bg-light navbar-light ">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}">Posts</a>
+                <div class="d-flex justify-content-between align-items-end gap-2">
+                    {% if user.is_authenticated %}
+                        <ul class="navbar-nav gap-2">
+                            <li class="nav-item">
+                                <a role="button" href="{% url 'post_create' %}" 
+                                id="create_new_post" 
+                                class="btn btn-primary nav-link">New Post</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a role="button" href="{% url 'drafts' user.username %}" 
+                                id="view_drafts" 
+                                class="btn btn-secondary nav-link ">My Drafts</a>
                             </li>
                         </ul>
-                    </div>
-                    <button type="submit" class="btn btn-warning">Filter</button>
-                </form>
+                    {% endif %}
+                    {% if users %}
+                        <form method="get" class="navbar-nav  gap-2">
+                            <input type="text" name="q" value="{{ query }}" class="form-control me-2 "
+                                placeholder="Search Posts...">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter Posts By
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <select name="user" class="form-select">
+                                            <option value="">All Users</option>
+                                            {% for u in users%}
+                                                <option value="{{ u.id }}" 
+                                                {% if selected_user == u.id|stringformat:"s" %}selected{% endif %}>
+                                                {{ u.username }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button type="submit" class="btn btn-warning">Filter</button>
+                        </form>
+                    {% endif %}
             </div>
-    {% endif %}
-        </div>
+        </nav>
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -88,7 +98,7 @@
             </div>
             {% if is_paginated %}
             <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
+                <ul class="pagination justify-content-center gap-3">
                     {% if page_obj.has_previous %}
                     <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV</a></li>
                     {% endif %}
