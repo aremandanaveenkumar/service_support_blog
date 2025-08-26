@@ -49,6 +49,12 @@
 								href="#tab2" role="tab"
 								aria-controls="tab2" aria-selected="false">Rectification</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link " 
+								data-bs-toggle="tab"
+								href="#tab3" role="tab"
+								aria-controls="tab3" aria-selected="false">Customer-Details</a>
+            </li>
           </ul>
           </div>
           <div class="d-flex justify-content-end">
@@ -77,6 +83,42 @@
               <div class="tab-pane fade " id="tab2"
 								role="tabpanel" aria-labelledby="tab2-tab">
           {{ post.rectification | safe }}
+              </div>
+              <div class="tab-pane fade " id="tab3"
+								role="tabpanel" aria-labelledby="tab3-tab">
+                <div class="mb-2">
+                  <label class="form-label"><h6>Customer</h6></label>
+                  <input type="text" class="form-control" value="{{ post.customer }}" readonly>
+                </div>
+                
+                <div class="mb-2">
+                  <div class="mb-2">
+                    <h6>Customer Address</h6>
+                    <label class="form-label">Street</label>
+                    <input type="text" class="form-control" 
+                    value="{{ post.customer_address.street }}" readonly>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" 
+                    value="{{ post.customer_address.city }}" readonly>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" 
+                    value="{{ post.customer_address.state }}" readonly>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" 
+                    value="{{ post.customer_address.postal_code }}" readonly>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Country</label>
+                    <input type="text" class="form-control" 
+                    value="{{ post.customer_address.country }}" readonly>
+                  </div>
+                </div>
               </div>
           </div>
     </div>
