@@ -3,9 +3,9 @@ from django.contrib import messages
 from .models import About
 from .forms import CollaborateForm
 
-# Create your views here.
+
 def about_me(request):
-    
+
     if request.method == "POST":
         collaborate_form = CollaborateForm(data=request.POST)
         if collaborate_form.is_valid():
