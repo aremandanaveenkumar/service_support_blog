@@ -157,13 +157,12 @@ def post_create(request):
             post = post_form.save(commit=False)
             slug = slugify(post.title)
             post.slug = slug
-            post.author = request.user            
+            post.author = request.user
             post.save()
             address_form = AddressForm()
             messages.add_message(request, 
                                  messages.SUCCESS, "Post Created.")
-            return HttpResponseRedirect(reverse('post_detail', 
-                                                args=[slug]))    
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
     else:
         post_form = PostForm()
