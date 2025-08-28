@@ -15,12 +15,12 @@
                             <li class="nav-item">
                                 <a role="button" href="{% url 'post_create' %}" 
                                 id="create_new_post" 
-                                class="btn btn-primary nav-link">New Post</a>
+                                class="btn btn-primary nav-link text-white">New Post</a>
                             </li>
                             <li class="nav-item ">
                                 <a role="button" href="{% url 'drafts' user.username %}" 
                                 id="view_drafts" 
-                                class="btn btn-secondary nav-link ">My Drafts</a>
+                                class="btn btn-secondary nav-link text-white">My Drafts</a>
                             </li>
                         </ul>
                     {% endif %}
@@ -47,7 +47,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <button type="submit" class="btn btn-warning">Filter</button>
+                            <button type="submit" class="btn btn-warning ">Filter</button>
                         </form>
                     {% endif %}
             </div>

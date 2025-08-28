@@ -9,9 +9,9 @@
           {% if user.is_authenticated and post.author == user %}
           <div class="d-flex mb-1 justify-content-end gap-2">
             <a href="{% url 'post_edit' post.slug %}"
-            id="edit_post" class="btn btn-sm btn-info">Edit</a>
+            id="edit_post" class="btn btn-sm btn-info ">Edit</a>
             <a href="{% url 'post_delete' post.slug %}"
-            id="delete_post" class="btn btn-sm btn-danger">Delete</a>
+            id="delete_post" class="btn btn-sm btn-danger text-white">Delete</a>
           </div>
           {% endif %}
             <div class="col-md-6 masthead-text">
