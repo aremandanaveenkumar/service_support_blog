@@ -34,7 +34,7 @@
 <div class="container  ">
       <div class=" card mb-4 " >       
           
-        <div class="card-header  d-flex justify-content-between align-items-center"">
+        <div class="card-header  d-flex justify-content-between align-items-center">
           <div>
             <ul class="nav nav-tabs card-header-tabs" role="tablist">
             <li class="nav-item">
@@ -77,17 +77,17 @@
         </div>
         <div class="card-body tab-content border" id="postcontent">
           <div class="tab-pane fade in m-0 active show" id="tab1"
-								 aria-labelledby="tab1-tab">
+								 aria-labelledby="tab1">
           {{ post.problem_reported | safe }}
               </div>
               <div class="tab-pane fade " id="tab2"
-								role="tabpanel" aria-labelledby="tab2-tab">
+								role="tabpanel" aria-labelledby="tab2">
           {{ post.rectification | safe }}
               </div>
               <div class="tab-pane fade " id="tab3"
-								role="tabpanel" aria-labelledby="tab3-tab">
+								role="tabpanel" aria-labelledby="tab3">
                 <div class="mb-2">
-                  <label class="form-label"><h6>Customer</h6></label>
+                  <label class="form-label"><strong>Customer</strong></label>
                   <input type="text" class="form-control" value="{{ post.customer }}" readonly>
                 </div>
                 
@@ -213,12 +213,12 @@
 </div>
 
 <div class="modal fade" id="deletePostModal" tabindex="-1"
-  aria-labelledby="deleteModalLabel" aria-hidden="true">
+  aria-labelledby="deletePostModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"
-          id="deleteModalLabel">Delete Post?</h5>
+          id="deletePostModalLabel">Delete Post?</h5>
         <button type="button" class="btn-close"
           data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
