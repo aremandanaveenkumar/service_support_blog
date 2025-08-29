@@ -170,3 +170,5 @@ SUMMERNOTE_CONFIG = {
         'width': '100%',
     },
 }
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
